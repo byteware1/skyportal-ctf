@@ -1,4 +1,4 @@
-# 🛡️ SkyPortal — Cybersecurity Training Platform
+# SkyPortal — Cybersecurity Training Platform
 
 A self-hosted CTF / Cyber Range platform for practicing web exploitation techniques in isolated Docker environments. Inspired by PortSwigger Web Security Academy.
 
@@ -15,7 +15,7 @@ A self-hosted CTF / Cyber Range platform for practicing web exploitation techniq
 
 ---
 
-## ✨ Features
+## Features
 
 - **Authentication** — JWT-based register/login with bcrypt password hashing
 - **Lab System** — Labs grouped by category with difficulty levels (Apprentice → Expert)
@@ -30,7 +30,7 @@ A self-hosted CTF / Cyber Range platform for practicing web exploitation techniq
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -60,7 +60,7 @@ A self-hosted CTF / Cyber Range platform for practicing web exploitation techniq
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
@@ -127,7 +127,7 @@ curl http://localhost:4000/api/health
 
 ---
 
-## 🔥 Firewall Setup
+## Firewall Setup
 
 ### UFW (Ubuntu)
 
@@ -153,7 +153,7 @@ iptables -A INPUT -p tcp --dport 10000:11000 -j ACCEPT
 
 ---
 
-## 🐳 Adding New Labs
+## Adding New Labs
 
 ### 1. Create lab directory
 
@@ -220,7 +220,7 @@ The backend automatically applies these container constraints:
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 skyportal/
@@ -277,7 +277,7 @@ skyportal/
 
 ---
 
-## 🔐 Security Notes
+## Security Notes
 
 | Feature | Implementation |
 |---|---|
