@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>HackBlog</title>
+  <link rel="stylesheet" href="/style.css"/>
+  <style>
+    .posts { display: grid; gap: 16px; margin-top: 24px; }
+    .post { background: #16161f; border: 1px solid #1e1e2e; border-radius: 6px; padding: 20px; }
+    .post h2 { font-size: 1rem; margin-bottom: 8px; color: #00ff88; }
+    .post p { color: #666680; font-size: 0.85rem; }
+    .tag { display: inline-block; padding: 2px 8px; background: rgba(0,229,255,0.1); border: 1px solid rgba(0,229,255,0.3); border-radius: 3px; color: #00e5ff; font-size: 0.7rem; margin-right: 6px; }
+    .lab-banner { background: rgba(255,51,85,0.1); border: 1px solid rgba(255,51,85,0.4); border-radius: 6px; padding: 14px 18px; margin-bottom: 24px; font-size: 0.85rem; color: #ff3355; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">HACK<span>BLOG</span></div>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/search">Search</a>
+      <a href="/about">About</a>
+    </nav>
+  </header>
+  <main>
+    <div class="lab-banner">⚠ LAB ENVIRONMENT — This application contains a reflected XSS vulnerability in the search function.</div>
+    <h1 style="margin-bottom:8px;">Latest Posts</h1>
+    <p style="color:var(--muted);font-size:0.85rem;margin-bottom:20px;">Security research, writeups, and tutorials.</p>
+    <div style="margin-bottom:20px;">
+      <form action="/search" method="GET" style="display:flex;gap:10px;">
+        <input type="text" name="q" placeholder="Search posts..." style="flex:1;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:4px;color:var(--text);font-family:inherit;font-size:0.9rem;outline:none;">
+        <button type="submit" style="padding:10px 20px;background:var(--accent);border:none;border-radius:4px;color:#000;font-family:inherit;font-weight:bold;cursor:pointer;">Search</button>
+      </form>
+    </div>
+    <div class="posts">
+      <div class="post"><h2>Introduction to SQL Injection</h2><span class="tag">SQLi</span><span class="tag">Beginner</span><p>A beginner's guide to understanding and exploiting SQL injection vulnerabilities...</p></div>
+      <div class="post"><h2>XSS: From Reflected to Stored</h2><span class="tag">XSS</span><span class="tag">Web</span><p>How cross-site scripting attacks work and how attackers chain them together...</p></div>
+      <div class="post"><h2>SSRF in the Cloud Era</h2><span class="tag">SSRF</span><span class="tag">Cloud</span><p>Server-side request forgery remains one of the most dangerous vulnerabilities in cloud environments...</p></div>
+      <div class="post"><h2>JWT Vulnerabilities Explained</h2><span class="tag">Auth</span><span class="tag">JWT</span><p>Common JWT implementation mistakes that lead to authentication bypasses...</p></div>
+    </div>
+  </main>
+</body>
+</html>

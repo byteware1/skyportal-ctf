@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HackMart - Online Security Shop</title>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #111118;
+      --border: #1e1e2e;
+      --accent: #00ff88;
+      --accent2: #0088ff;
+      --danger: #ff4444;
+      --text: #e0e0e0;
+      --muted: #666680;
+      --card: #16161f;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Courier New', monospace;
+      min-height: 100vh;
+    }
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .logo {
+      font-size: 1.4rem;
+      font-weight: bold;
+      color: var(--accent);
+      letter-spacing: 2px;
+    }
+    .logo span { color: var(--text); }
+    .lab-badge {
+      background: rgba(255,68,68,0.15);
+      border: 1px solid var(--danger);
+      color: var(--danger);
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      letter-spacing: 1px;
+    }
+    .layout {
+      display: flex;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 24px;
+      gap: 24px;
+    }
+    aside {
+      width: 220px;
+      flex-shrink: 0;
+    }
+    main { flex: 1; }
+    .sidebar-title {
+      color: var(--muted);
+      font-size: 0.7rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .cat-list { list-style: none; }
+    .cat-list li {
+      margin-bottom: 4px;
+    }
+    .cat-list a {
+      display: block;
+      padding: 8px 12px;
+      color: var(--text);
+      text-decoration: none;
+      border-radius: 4px;
+      border: 1px solid transparent;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .cat-list a:hover, .cat-list a.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(0,255,136,0.05);
+    }
+    .search-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 4px;
+    }
+    .search-bar input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--text);
+      padding: 10px 12px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      outline: none;
+    }
+    .search-bar input::placeholder { color: var(--muted); }
+    .btn {
+      padding: 10px 20px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+      transition: all 0.2s;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #000;
+    }
+    .btn-primary:hover { background: #00cc6a; }
+    .btn-ghost {
+      background: transparent;
+      color: var(--accent2);
+      border: 1px solid var(--accent2);
+    }
+    .btn-ghost:hover { background: rgba(0,136,255,0.1); }
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+    .product-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .product-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+    .product-img {
+      width: 100%;
+      height: 140px;
+      background: var(--surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .product-body { padding: 16px; }
+    .product-name {
+      font-weight: bold;
+      font-size: 0.95rem;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+    .product-desc {
+      color: var(--muted);
+      font-size: 0.8rem;
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+    .product-price {
+      color: var(--accent);
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+    .product-flag {
+      margin-top: 8px;
+      padding: 8px;
+      background: rgba(0,255,136,0.1);
+      border: 1px solid var(--accent);
+      border-radius: 4px;
+      color: var(--accent);
+      font-size: 0.8rem;
+      word-break: break-all;
+    }
+    .status-bar {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-family: monospace;
+    }
+    .status-bar .query {
+      color: var(--accent2);
+      word-break: break-all;
+    }
+    .status-bar .error {
+      color: var(--danger);
+    }
+    .status-bar .count {
+      color: var(--accent);
+    }
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--muted);
+    }
+    .empty-state .icon { font-size: 3rem; margin-bottom: 16px; }
+    .err-box {
+      background: rgba(255,68,68,0.1);
+      border: 1px solid var(--danger);
+      border-radius: 6px;
+      padding: 16px;
+      margin-bottom: 20px;
+      font-size: 0.85rem;
+    }
+    .err-box .err-title { color: var(--danger); font-weight: bold; margin-bottom: 6px; }
+    .err-box .err-detail { color: #ff8888; font-family: monospace; font-size: 0.8rem; }
+    .hint-panel {
+      background: rgba(0,136,255,0.08);
+      border: 1px solid var(--accent2);
+      border-radius: 6px;
+      padding: 16px;
+      margin-top: 24px;
+    }
+    .hint-panel h3 { color: var(--accent2); font-size: 0.85rem; margin-bottom: 10px; }
+    .hint-panel p { color: var(--muted); font-size: 0.8rem; line-height: 1.7; }
+    .hint-panel code {
+      background: var(--surface);
+      color: var(--accent);
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 0.8rem;
+    }
+    .product-icons = { Hardware: '🔧', Clothing: '👕', Tools: '🔑', Merchandise: '🎨', Software: '💻', Secret: '🚩' };
+    #loading { text-align: center; padding: 40px; color: var(--muted); }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">HACK<span>MART</span></div>
+    <div style="color:var(--muted);font-size:0.8rem;">The #1 Security Gear Shop</div>
+    <div class="lab-badge">⚠ VULNERABLE LAB ENVIRONMENT</div>
+  </header>
+
+  <div class="layout">
+    <aside>
+      <div class="sidebar-title">Categories</div>
+      <ul class="cat-list" id="catList">
+        <li><a onclick="filterCat('')" class="active" id="cat-all">All Products</a></li>
+      </ul>
+      <div class="hint-panel" style="margin-top:24px;">
+        <h3>🎯 Lab Objective</h3>
+        <p>This shop filters products by category using a SQL query. The category parameter is passed <strong style="color:#fff">directly into the query without sanitization</strong>.<br><br>
+        Try to find the <strong style="color:var(--accent)">unreleased products</strong> that are normally hidden by <code>released = 1</code>.</p>
+      </div>
+    </aside>
+
+    <main>
+      <div class="search-bar">
+        <input type="text" id="categoryInput" placeholder="Enter category (e.g. Hardware, Clothing...)" 
+               onkeydown="if(event.key==='Enter') doFilter()" />
+        <button class="btn btn-primary" onclick="doFilter()">FILTER</button>
+        <button class="btn btn-ghost" onclick="clearFilter()">RESET</button>
+      </div>
+
+      <div id="statusBar" class="status-bar" style="display:none;"></div>
+      <div id="errorBox" style="display:none;" class="err-box"></div>
+      <div id="products"></div>
+    </main>
+  </div>
+
+  <script>
+    const ICONS = {
+      Hardware: '🔧', Clothing: '👕', Tools: '🔑',
+      Merchandise: '🎨', Software: '💻', Secret: '🚩', default: '📦'
+    };
+
+    let currentCategory = '';
+
+    async function loadCategories() {
+      try {
+        const res = await fetch('/api/categories');
+        const cats = await res.json();
+        const list = document.getElementById('catList');
+        cats.forEach(cat => {
+          const li = document.createElement('li');
+          li.innerHTML = `<a onclick="filterCat('${cat}')" id="cat-${cat}">${cat}</a>`;
+          list.appendChild(li);
+        });
+      } catch (e) {}
+    }
+
+    function filterCat(cat) {
+      currentCategory = cat;
+      document.getElementById('categoryInput').value = cat;
+      document.querySelectorAll('.cat-list a').forEach(a => a.classList.remove('active'));
+      const el = document.getElementById(`cat-${cat || 'all'}`);
+      if (el) el.classList.add('active');
+      doFilter();
+    }
+
+    function clearFilter() {
+      document.getElementById('categoryInput').value = '';
+      filterCat('');
+    }
+
+    async function doFilter() {
+      const category = document.getElementById('categoryInput').value;
+      const statusBar = document.getElementById('statusBar');
+      const errorBox = document.getElementById('errorBox');
+      const productsDiv = document.getElementById('products');
+
+      productsDiv.innerHTML = '<div id="loading">⟳ Querying database...</div>';
+      statusBar.style.display = 'none';
+      errorBox.style.display = 'none';
+
+      try {
+        const res = await fetch(`/api/products?category=${encodeURIComponent(category)}`);
+        const data = await res.json();
+
+        if (!res.ok || data.error) {
+          errorBox.style.display = 'block';
+          errorBox.innerHTML = `
+            <div class="err-title">⚠ Database Error</div>
+            <div class="err-detail">${data.detail || data.error || 'Unknown error'}</div>
+          `;
+          productsDiv.innerHTML = '';
+          statusBar.style.display = 'block';
+          statusBar.innerHTML = `<span class="error">✗ Query failed</span> — Check the error above for clues`;
+          return;
+        }
+
+        const products = data.products || [];
+        statusBar.style.display = 'block';
+        
+        const queryPreview = category
+          ? `SELECT ... FROM products WHERE category = '<span class="error">${escHtml(category)}</span>' AND released = 1`
+          : `SELECT ... FROM products WHERE released = 1`;
+        
+        statusBar.innerHTML = `
+          Query: <span class="query">${queryPreview}</span> &nbsp;|&nbsp;
+          Results: <span class="count">${products.length} rows</span>
+        `;
+
+        if (products.length === 0) {
+          productsDiv.innerHTML = `
+            <div class="empty-state">
+              <div class="icon">🔍</div>
+              <div>No products found for this query</div>
+              <div style="font-size:0.8rem;margin-top:8px;color:#555">Try a different payload...</div>
+            </div>`;
+          return;
+        }
+
+        productsDiv.innerHTML = `<div class="products-grid">${products.map(renderCard).join('')}</div>`;
+      } catch (err) {
+        productsDiv.innerHTML = `<div class="empty-state"><div>Network error: ${err.message}</div></div>`;
+      }
+    }
+
+    function renderCard(p) {
+      const icon = ICONS[p.category] || ICONS.default;
+      const flagMatch = p.description && p.description.match(/FLAG\{[^}]+\}/);
+      const flagHtml = flagMatch
+        ? `<div class="product-flag">🚩 FLAG FOUND: <strong>${flagMatch[0]}</strong></div>`
+        : '';
+      return `
+        <div class="product-card">
+          <div class="product-img">${icon}</div>
+          <div class="product-body">
+            <div class="product-name">${escHtml(p.name)}</div>
+            <div class="product-desc">${escHtml(p.description || '')}</div>
+            <div class="product-price">$${parseFloat(p.price || 0).toFixed(2)}</div>
+            ${flagHtml}
+          </div>
+        </div>`;
+    }
+
+    function escHtml(str) {
+      return String(str)
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    loadCategories();
+    doFilter();
+  </script>
+</body>
+</html>

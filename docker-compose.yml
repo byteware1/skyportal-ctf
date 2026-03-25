@@ -1,0 +1,84 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: skyportal-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: skyportal
+      POSTGRES_USER: skyportal
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-skyportal_secret_2024}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./backend/db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - skyportal-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U skyportal"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: skyportal-api
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 4000
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: skyportal
+      DB_USER: skyportal
+      DB_PASSWORD: ${DB_PASSWORD:-skyportal_secret_2024}
+      JWT_SECRET: ${JWT_SECRET:-skyportal_jwt_super_secret_2024}
+      LAB_HOST: ${LAB_HOST:-localhost}
+      LAB_PORT_MIN: 10000
+      LAB_PORT_MAX: 11000
+      LAB_TIMEOUT_MINUTES: 30
+      DOCKER_SOCKET: /var/run/docker.sock
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - skyportal-net
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "4000:4000"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: skyportal-web
+    restart: unless-stopped
+    networks:
+      - skyportal-net
+    depends_on:
+      - backend
+
+  nginx:
+    image: nginx:alpine
+    container_name: skyportal-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - skyportal-net
+    depends_on:
+      - frontend
+      - backend
+
+volumes:
+  pgdata:
+
+networks:
+  skyportal-net:
+    driver: bridge
